@@ -391,3 +391,5 @@ set_property -name "steps.write_bitstream.args.more options" -value "" -objects 
 current_run -implementation [get_runs impl_1]
 
 puts "INFO: Project created:zynq_proj"
+puts "INFO: Generate output products"
+generate_target all [get_files  ./zynq_proj.srcs/sources_1/bd/design_1/design_1.bd]
