@@ -33,17 +33,18 @@
 #include "xscugic.h"
 #include "xil_exception.h"
 #include "scugic_header.h"
+#include "xgpio.h"
+#include "gpio_header.h"
 #include "xdevcfg.h"
 #include "devcfg_header.h"
 #include "xdmaps.h"
 #include "dmaps_header.h"
-#include "xgpio.h"
-#include "gpio_header.h"
+#include "axidma_header.h"
 #include "xscutimer.h"
 #include "scutimer_header.h"
 #include "xscuwdt.h"
 #include "scuwdt_header.h"
-void testperiph ()
+int testperiph ()
 {
    static XScuGic intc;
    static XScuTimer ps7_scutimer_0;
@@ -83,6 +84,23 @@ void testperiph ()
 
 
    {
+      u32 status;
+      
+      print("\r\nRunning GpioOutputExample() for axi_gpio_0...\r\n");
+
+      status = GpioOutputExample(XPAR_AXI_GPIO_0_DEVICE_ID,8);
+      
+      if (status == 0) {
+         print("GpioOutputExample PASSED.\r\n");
+      }
+      else {
+         print("GpioOutputExample FAILED.\r\n");
+      }
+   }
+
+
+
+   {
       int Status;
 
       print("\r\n Running DcfgSelfTestExample() for ps7_dev_cfg_0...\r\n");
@@ -117,17 +135,18 @@ void testperiph ()
 
 
    {
-      u32 status;
-      
-      print("\r\nRunning GpioOutputExample() for axi_gpio_0...\r\n");
+      int status;
 
-      status = GpioOutputExample(XPAR_AXI_GPIO_0_DEVICE_ID,8);
-      
+
+      print("\r\n Running AxiDMASelfTestExample() for axi_dma_0...\r\n");
+
+      status = AxiDMASelfTestExample(XPAR_AXI_DMA_0_DEVICE_ID);
+
       if (status == 0) {
-         print("GpioOutputExample PASSED.\r\n");
+         print("AxiDMASelfTestExample PASSED\r\n");
       }
       else {
-         print("GpioOutputExample FAILED.\r\n");
+         print("AxiDMASelfTestExample FAILED\r\n");
       }
    }
 
@@ -192,8 +211,8 @@ void testperiph ()
 
 
 
-   print("---Exiting Peripheral tests ---\n\r");
+   print("---Exiting main---\n\r");
    Xil_DCacheDisable();
    Xil_ICacheDisable();
-
+   return 0;
 }
